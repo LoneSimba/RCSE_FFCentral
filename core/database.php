@@ -66,6 +66,7 @@ class Database
     private function prepare_statemets()
     {
         $this->users_requests['selectall'] = $this->database->prepare("SELECT * FROM users");
+        $this->users_requests['select'] = $this->database->prepare("SELECT * FROM users WHERE `login`=?");
 
         $this->fanfics_requests['selectall'] = $this->database->prepare("SELECT * FROM fanfics");
 
@@ -75,33 +76,48 @@ class Database
 
         $this->bans_requests['selectall'] = $this->database->prepare("SELECT * FROM  bans");
     }
-    
+
     /**
      * Выполняет запрос, указанный в $type
      *
-     * @param string $type   Тип запроса
+     * @param string $type Тип запроса
+     * @param string $table Таблица
      * @param array  $params Массив параметров для запроса
      * @return void
      */
-    public function execute_statement(string $type, array $params)
+    public function execute_statement(string $type, string $table, array $params)
     {
-
-        switch ($type) {
-            case 'users_selall':
-                $this->users_requests['selectall']->execute();
-                break;
-            case 'fanfics_selall':
-                $this->fanfics_requests['selectall']->execute();
-                break;
-            case 'genres_selall':
-                $this->genres_requests['selectall']->execute();
-                break;
-            case 'bans_selall':
-                $this->bans_requests['selectall']->execute();
-                break;
-            default:
-                print('Не выбран тип запроса!');
-                break;
+        if(($type != null || $type != "") || ($table != null || $table != "")) {
+            switch($table) {
+                case 'users':
+                    $this->users_requests[$type] = $this->database->execute($params);
+                    break;
+                case 'usergroups':
+                    $this->usergorups_requests[$type] = $this->database->execute($params);
+                    break;
+                case 'bans':
+                    $this->bans_requests[$type] = $this->database->execute($params);
+                    break;
+                case 'fanfics':
+                    $this->fanfics_requests[$type] = $this->database->execute($params);
+                    break;
+                case 'replies':
+                    $this->replies_requests[$type] = $this->database->execute($params);
+                    break;
+                case 'fandoms':
+                    $this->fandoms_requests[$type] = $this->database->execute($params);
+                    break;
+                case 'genres':
+                    $this->genres_requests[$type] = $this->database->execute($params);
+                    break;
+                case 'orders':
+                    $this->orders_requests[$type] = $this->database->execute($params);
+                    break;
+                default:
+                    print("Ошибка - для исполнения запросов udef используйте execute_udef()");
+            }
+        } else {
+            print("Ошибка - не указан тип запроса или целевая таблица!");
         }
 
     }
@@ -120,7 +136,7 @@ class Database
         if ($table != null || $table != "") {
             switch ($type) {
                 case 'select':
-                    ($params != null || $params != "") ? $this->udef_requests['select'] = $this->database->prepare("SELECT * FROM $table WHERE $params[0]=$params[1]") : print("Ошибка - массив параметров пуст!");
+                    ($params != null || $params != "") ? $this->udef_requests['select'] = $this->database->prepare("SELECT * FROM $table WHERE $params[0]=:param1") : print("Ошибка - массив параметров пуст!");
                     break;
                 case 'selectall':
                     switch ($table) {
@@ -140,7 +156,7 @@ class Database
                     }
                     break;
                 case 'update':
-                    ($params != null || $params != "") ? $this->udef_requests['update'] = $this->database->prepare("UPDATE $table SET $params[2]=$params[3] WHERE $params[0]=$params[1]") : print("Ошибка - массив параметров пуст!");
+                    ($params != null || $params != "") ? $this->udef_requests['update'] = $this->database->prepare("UPDATE $table SET $params[2]=:param3 WHERE $params[0]=:param1") : print("Ошибка - массив параметров пуст!");
                     break;
                 case 'insert':
                     switch ($table) {
