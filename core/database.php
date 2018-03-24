@@ -65,8 +65,12 @@ class Database
      */
     private function prepare_statemets()
     {
-        $this->users_requests['selectall'] = $this->database->prepare("SELECT * FROM users");
-        $this->users_requests['select'] = $this->database->prepare("SELECT * FROM users WHERE `login`=?");
+        $this->users_requests['selectall'] = $this->database->prepare("SELECT * FROM `users`");
+        $this->users_requests['select'] = $this->database->prepare("SELECT * FROM `users` WHERE `login`=:param0");
+        $this->users_requests['login'] = $this->database->prepare("SELECT `password` FROM users WHERE `login`=:login");
+        $this->users_requests['update'] = $this->database->prepare("UPDATE `users` SET `firstname`=:firstname,`lastname`=:lastname,`password`=:password,`email`=[value-5],`usergroup`=:usergroup,`sex`=:sex,`origin`=:origin,`settings`=:settings WHERE `login`=:login");
+        $this->users_requests['insert'] = $this->database->prepare("INSERT INTO `users`(`login`, `firstname`, `lastname`, `password`, `email`, `usergroup`, `brithdate`, `regdate`, `sex`, `origin`, `settings`) VALUES (:login,:fisrtname,:lastname,:password,:email,:usergroup,:brithdate,:regdate,:sex,:origin,:settings)");
+        $this->users_requests['remove'] = $this->database->prepare("DELETE FROM `users` WHERE `login`=:login");
 
         $this->fanfics_requests['selectall'] = $this->database->prepare("SELECT * FROM fanfics");
 
@@ -87,8 +91,8 @@ class Database
      */
     public function execute_statement(string $type, string $table, array $params)
     {
-        if(($type != null || $type != "") || ($table != null || $table != "")) {
-            switch($table) {
+        if (($type != null || $type != "") || ($table != null || $table != "")) {
+            switch ($table) {
                 case 'users':
                     $this->users_requests[$type] = $this->database->execute($params);
                     break;
