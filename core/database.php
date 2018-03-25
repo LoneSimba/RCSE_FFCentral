@@ -66,19 +66,29 @@ class Database
     private function prepare_statemets()
     {
         $this->users_requests['selectall'] = $this->database->prepare("SELECT * FROM `users`");
-        $this->users_requests['select'] = $this->database->prepare("SELECT * FROM `users` WHERE `login`=:param0");
+        $this->users_requests['select'] = $this->database->prepare("SELECT * FROM `users` WHERE `login`=:");
         $this->users_requests['login'] = $this->database->prepare("SELECT `password` FROM users WHERE `login`=:login");
         $this->users_requests['update'] = $this->database->prepare("UPDATE `users` SET `firstname`=:firstname,`lastname`=:lastname,`password`=:password,`email`=[value-5],`usergroup`=:usergroup,`sex`=:sex,`origin`=:origin,`settings`=:settings WHERE `login`=:login");
         $this->users_requests['insert'] = $this->database->prepare("INSERT INTO `users`(`login`, `firstname`, `lastname`, `password`, `email`, `usergroup`, `brithdate`, `regdate`, `sex`, `origin`, `settings`) VALUES (:login,:fisrtname,:lastname,:password,:email,:usergroup,:brithdate,:regdate,:sex,:origin,:settings)");
         $this->users_requests['remove'] = $this->database->prepare("DELETE FROM `users` WHERE `login`=:login");
 
-        $this->fanfics_requests['selectall'] = $this->database->prepare("SELECT * FROM fanfics");
+        $this->usergorups_requests['selectall'] = $this->database->prepare("SELECT * FROM `usergroups`");
+        $this->usergorups_requests['select'] = $this->database->prepare("SELECT * FROM `usergroups` WHERE 'usergroup'=:usergroup");
+        $this->usergorups_requests['update'] = $this->database->prepare("UPDATE `usergroups` SET `priority`=:priority,`permissions`=:permissions WHERE `usergroup`=:usergroup");
+        $this->usergorups_requests['insert'] = $this->database->prepare("INSERT INTO `usergroups`(`usergroup`, `priority`, `permissions`) VALUES (:usergroup,:priority,:permissions)");
+        $this->usergorups_requests['remove'] = $this->database->prepare("DELETE FROM `usergroups` WHERE `usergroup`=:usergoup");
 
-        $this->replies_requests['selectall'] = $this->database->prepare("SELECT * FROM replies"); // Заметка: сомневаюсь в необходимости прогрузки всех отзывов на фанфики
+        $this->bans_requests['selectall'] = $this->database->prepare("SELECT * FROM `bans`");
+        $this->bans_requests['select'] = $this->database->prepare("");
+        $this->bans_requests['update'] = $this->database->prepare("");
+        $this->bans_requests['insert'] = $this->database->prepare("");
+        $this->bans_requests['remove'] = $this->database->prepare("");
 
-        $this->genres_requests['selectall'] = $this->database->prepare("SELECT * FROM genres");
+        $this->fanfics_requests['selectall'] = $this->database->prepare("SELECT * FROM `fanfics`");
 
-        $this->bans_requests['selectall'] = $this->database->prepare("SELECT * FROM  bans");
+        $this->replies_requests['selectall'] = $this->database->prepare("SELECT * FROM `replies`"); // Заметка: сомневаюсь в необходимости прогрузки всех отзывов на фанфики
+
+        $this->genres_requests['selectall'] = $this->database->prepare("SELECT * FROM `genres`");
     }
 
     /**
