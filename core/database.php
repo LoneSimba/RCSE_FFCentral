@@ -79,16 +79,20 @@ class Database
         $this->usergorups_requests['remove'] = $this->database->prepare("DELETE FROM `usergroups` WHERE `usergroup`=:usergoup");
 
         $this->bans_requests['selectall'] = $this->database->prepare("SELECT * FROM `bans`");
-        $this->bans_requests['select'] = $this->database->prepare("");
-        $this->bans_requests['update'] = $this->database->prepare("");
-        $this->bans_requests['insert'] = $this->database->prepare("");
-        $this->bans_requests['remove'] = $this->database->prepare("");
+        $this->bans_requests['select'] = $this->database->prepare("SELECT `login`, `dateofban`, `expirationdate`, `reason`, `prooflink` FROM `bans` WHERE `login`=:login");
+        $this->bans_requests['update'] = $this->database->prepare("UPDATE `bans` SET `login`=:login,`dateofban`=:dateofban,`expirationdate`=:expirationdate,`reason`=:reason,`prooflink`=:prooflink WHERE `ban_id`=:ban_id");
+        $this->bans_requests['insert'] = $this->database->prepare("INSERT INTO `bans`(`login`, `dateofban`, `expirationdate`, `reason`, `prooflink`) VALUES (:login,:dateofban,:expirationdate,:reason,:prooflink)");
+        $this->bans_requests['remove'] = $this->database->prepare("DELETE FROM `bans` WHERE `ban_id`=:ban_id");
 
         $this->fanfics_requests['selectall'] = $this->database->prepare("SELECT * FROM `fanfics`");
 
         $this->replies_requests['selectall'] = $this->database->prepare("SELECT * FROM `replies`"); // Заметка: сомневаюсь в необходимости прогрузки всех отзывов на фанфики
 
+        $this->fandoms_requests['selectall'] = $this->database->prepare("");
+
         $this->genres_requests['selectall'] = $this->database->prepare("SELECT * FROM `genres`");
+
+        $this->orders_requests['selectall'] = $this->database->prepare("");
     }
 
     /**
