@@ -85,10 +85,16 @@ class Database
         $this->bans_requests['remove'] = $this->database->prepare("DELETE FROM `bans` WHERE `ban_id`=:ban_id");
 
         $this->fanfics_requests['selectall'] = $this->database->prepare("SELECT * FROM `fanfics`");
+        $this->fanfics_requests['select'] = $this->database->prepare("SELECT , `title`, `description`, `chapters`, `fandom_id`, `genre_id`, `relationship_id`, `rating_id`, `collection_id`, `characters`, `authors`, `is_crossover`, `note_id` FROM `fanfics` WHERE `fanfic_id`=:fanfic_id");
+        $this->fanfics_requests['update'] = $this->database->prepare("UPDATE `fanfics` SET `title`=:title,`description`=:description,`chapters`=:chapters,`fandom_id`=:fandom_id,`genre_id`=:genre_id,`relationship_id`=:relationship_id,`rating_id`=:rating_id,`collection_id`=:collection_id,`characters`=:characters,`authors`=:authors,`is_crossover`=:is_crossover,`note_id`=:note_id WHERE `fanfic_id`=:fanfic_id");
+        $this->fanfics_requests['insert'] = $this->database->prepare("INSERT INTO `fanfics`(`title`, `description`, `chapters`, `fandom_id`, `genre_id`, `relationship_id`, `rating_id`, `collection_id`, `characters`, `authors`, `is_crossover`, `note_id`) VALUES (:title,:description,:chapters,:fandom_id,:genre_id,:relationship_id,:rating_id,:collection_id,:characters,:authors,:is_crossover,:note_id)");
+        $this->fanfics_requests['remove'] = $this->database->prepare("DELETE FROM `fanfics` WHERE `fanfic_id`=:fanfic_id");
 
-        $this->replies_requests['selectall'] = $this->database->prepare("SELECT * FROM `replies`"); // Заметка: сомневаюсь в необходимости прогрузки всех отзывов на фанфики
-
-        $this->fandoms_requests['selectall'] = $this->database->prepare("");
+        $this->fandoms_requests['selectall'] = $this->database->prepare("SELECT * FROM `fandoms` WHERE");
+        $this->fandoms_requests['select'] = $this->database->prepare("SELECT `title_ru`, `title_en`, `title_ch`, `descr_en`, `descr_ru`, `descr_ch` FROM `fandoms` WHERE `fandom_id`=:fandom_id");
+        $this->fandoms_requests['update'] = $this->database->prepare("UPDATE `fandoms` SET `title_ru`=:title_ru,`title_en`=:title_en,`title_ch`=:title_en,`descr_en`=:descr_en,`descr_ru`=:descr_ru,`descr_ch`=:descr_ch WHERE `fandom_id`=:fandom_id");
+        $this->fandoms_requests['insert'] = $this->database->prepare("INSERT INTO `fandoms`(`title_ru`, `title_en`, `title_ch`, `descr_en`, `descr_ru`, `descr_ch`) VALUES (:title_ru,:title_en,:title_ch,:descr_en,:descr_ru,:descr_ch)");
+        $this->fandoms_requests['remove'] = $this->database->prepare("DELETE FROM `fandoms` WHERE `fandom_id`=:fandom_id");
 
         $this->genres_requests['selectall'] = $this->database->prepare("SELECT * FROM `genres`");
 
