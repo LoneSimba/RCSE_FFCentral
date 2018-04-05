@@ -26,7 +26,7 @@ class Database
     public $usergorups_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null];
     public $bans_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
     public $fanfics_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
-    public $replies_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
+    public $relationhips_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
     public $fandoms_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null];
     public $genres_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
     public $orders_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
@@ -96,10 +96,25 @@ class Database
         $this->fandoms_requests['insert'] = $this->database->prepare("INSERT INTO `fandoms`(`title_ru`, `title_en`, `title_ch`, `descr_en`, `descr_ru`, `descr_ch`) VALUES (:title_ru,:title_en,:title_ch,:descr_en,:descr_ru,:descr_ch)");
         $this->fandoms_requests['remove'] = $this->database->prepare("DELETE FROM `fandoms` WHERE `fandom_id`=:fandom_id");
 
-        $this->genres_requests['selectall'] = $this->database->prepare("SELECT * FROM `genres`");
+        $this->relationships_requests['selectall'] = $this->database->prepare("SELECT * FROM `relationships`");
+        $this->relationships_requests['select'] = $this->database->prepare("SELECT `title_en`, `title_en_a`, `title_ru`, `title_ru_a`, `title_ch`, `title_ch_a`, `descr_en`, `descr_ru`, `descr_ch` FROM `relationships` WHERE `relation_id`=:relation_id");
+        $this->relationships_requests['update'] = $this->database->prepare("UPDATE `relationships` SET `title_en`=:title_en,`title_en_a`=:title_en_a,`title_ru`=:title_ru,`title_ru_a`=:title_ru_a,`title_ch`=:title_ch,`title_ch_a`=:title_ch_a,`descr_en`=:descr_en,`descr_ru`=:descr_ru,`descr_ch`=:descr_ch WHERE `relation_id`=:relation_id");
+        $this->relationships_requests['insert'] = $this->database->prepare("INSERT INTO `relationships`(`title_en`, `title_en_a`, `title_ru`, `title_ru_a`, `title_ch`, `title_ch_a`, `descr_en`, `descr_ru`, `descr_ch`) VALUES (:title_en,:title_en_a,:title_ru,:title_ru_a,:title_ch,:title_ch_a,:descr_en,:descr_ru,:descr_ch)");
+        $this->relationships_requests['remove'] = $this->database->prepare("DELETE FROM `relationships` WHERE `relation_id`=:relation_id");
 
-        $this->orders_requests['selectall'] = $this->database->prepare("");
-    }
+        $this->genres_requests['selectall'] = $this->database->prepare("SELECT * FROM `genres`");
+        $this->genres_requests['select'] = $this->database->prepare("SELECT `title_en`, `title_ru`, `title_ch` FROM `genres` WHERE `genre_id`=:genre_id");
+        $this->genres_requests['update'] = $this->database->prepare("UPDATE `genres` SET `title_en`=:title_en,`title_ru`=:title_ru,`title_ch`=:title_ch WHERE `genre_id`=:genre_id");
+        $this->genres_requests['insert'] = $this->database->prepare("INSERT INTO `genres`(`title_en`, `title_ru`, `title_ch`) VALUES (:title_en,:title_ru,:title_ch)");
+        $this->genres_requests['remove'] = $this->database->prepare("DELETE FROM `genres` WHERE `genre_id`=:genre_id");
+
+        $this->orders_requests['selectall'] = $this->database->prepare("SELECT * FROM `orders`");
+        $this->orders_requests['select'] = $this->database->prepare("SELECT * FROM `orders` WHERE `order_id`=:order_id");
+        $this->orders_requests['update'] = $this->database->prepare("UPDATE `orders` SET `title`=:title,`description`=:description,`language`=:language,`type`=:type,`fandoms_id`=:fandoms_id,`author`=:author WHERE `order_id`=:order_id");
+        $this->orders_requests['insert'] = $this->database->prepare("INSERT INTO `orders`(`title`, `description`, `language`, `type`, `fandoms_id`, `author`) VALUES (:title,:description,:language,:type,:fandoms_id,:author)");
+        $this->orders_requests['remove'] = $this->database->prepare("DELETE FROM `orders` WHERE `order_id`=:order_id");
+
+        }
 
     /**
      * Выполняет запрос, указанный в $type
