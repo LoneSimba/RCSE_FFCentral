@@ -30,6 +30,9 @@ class Database
     public $fandoms_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null];
     public $genres_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
     public $orders_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
+    public $ratings_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
+    public $characters_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
+
     public $udef_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
 
     /*
@@ -45,7 +48,7 @@ class Database
     public function __construct()
     {
 
-        $dbinfo = 'mysql:dbname=ffcentral;host=127.0.0.1';
+        $dbinfo = 'mysql:dbname=RCSE_FFCentral;host=127.0.0.1';
         $dbuser;
         $dbpass;
 
@@ -66,17 +69,17 @@ class Database
     private function prepare_statemets()
     {
         $this->users_requests['selectall'] = $this->database->prepare("SELECT * FROM `users`");
-        $this->users_requests['select'] = $this->database->prepare("SELECT * FROM `users` WHERE `login`=:");
-        $this->users_requests['login'] = $this->database->prepare("SELECT `password` FROM users WHERE `login`=:login");
-        $this->users_requests['update'] = $this->database->prepare("UPDATE `users` SET `firstname`=:firstname,`lastname`=:lastname,`password`=:password,`email`=[value-5],`usergroup`=:usergroup,`sex`=:sex,`origin`=:origin,`settings`=:settings WHERE `login`=:login");
-        $this->users_requests['insert'] = $this->database->prepare("INSERT INTO `users`(`login`, `firstname`, `lastname`, `password`, `email`, `usergroup`, `brithdate`, `regdate`, `sex`, `origin`, `settings`) VALUES (:login,:fisrtname,:lastname,:password,:email,:usergroup,:brithdate,:regdate,:sex,:origin,:settings)");
-        $this->users_requests['remove'] = $this->database->prepare("DELETE FROM `users` WHERE `login`=:login");
+        $this->users_requests['select'] = $this->database->prepare("SELECT * FROM `users` WHERE `login`=?");
+        $this->users_requests['login'] = $this->database->prepare("SELECT `password` FROM users WHERE `login`=?");
+        $this->users_requests['update'] = $this->database->prepare("UPDATE `users` SET `firstname`=?,`lastname`=?,`password`=?,`email`=?,`usergroup`=?,`sex`=?,`origin`=?,`settings`=? WHERE `login`=?");
+        $this->users_requests['insert'] = $this->database->prepare("INSERT INTO `users`(`login`, `firstname`, `lastname`, `password`, `email`, `usergroup`, `brithdate`, `regdate`, `sex`, `origin`, `settings`) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+        $this->users_requests['remove'] = $this->database->prepare("DELETE FROM `users` WHERE `login`=?");
 
         $this->usergorups_requests['selectall'] = $this->database->prepare("SELECT * FROM `usergroups`");
-        $this->usergorups_requests['select'] = $this->database->prepare("SELECT * FROM `usergroups` WHERE 'usergroup'=:usergroup");
-        $this->usergorups_requests['update'] = $this->database->prepare("UPDATE `usergroups` SET `priority`=:priority,`permissions`=:permissions WHERE `usergroup`=:usergroup");
-        $this->usergorups_requests['insert'] = $this->database->prepare("INSERT INTO `usergroups`(`usergroup`, `priority`, `permissions`) VALUES (:usergroup,:priority,:permissions)");
-        $this->usergorups_requests['remove'] = $this->database->prepare("DELETE FROM `usergroups` WHERE `usergroup`=:usergoup");
+        $this->usergorups_requests['select'] = $this->database->prepare("SELECT * FROM `usergroups` WHERE 'usergroup'=?");
+        $this->usergorups_requests['update'] = $this->database->prepare("UPDATE `usergroups` SET `priority`=?,`permissions`=? WHERE `usergroup`=?");
+        $this->usergorups_requests['insert'] = $this->database->prepare("INSERT INTO `usergroups`(`usergroup`, `priority`, `permissions`) VALUES (?,?,?)");
+        $this->usergorups_requests['remove'] = $this->database->prepare("DELETE FROM `usergroups` WHERE `usergroup`=?");
 
         $this->bans_requests['selectall'] = $this->database->prepare("SELECT * FROM `bans`");
         $this->bans_requests['select'] = $this->database->prepare("SELECT `login`, `dateofban`, `expirationdate`, `reason`, `prooflink` FROM `bans` WHERE `login`=:login");
@@ -113,7 +116,18 @@ class Database
         $this->orders_requests['update'] = $this->database->prepare("UPDATE `orders` SET `title`=:title,`description`=:description,`language`=:language,`type`=:type,`fandoms_id`=:fandoms_id,`author`=:author WHERE `order_id`=:order_id");
         $this->orders_requests['insert'] = $this->database->prepare("INSERT INTO `orders`(`title`, `description`, `language`, `type`, `fandoms_id`, `author`) VALUES (:title,:description,:language,:type,:fandoms_id,:author)");
         $this->orders_requests['remove'] = $this->database->prepare("DELETE FROM `orders` WHERE `order_id`=:order_id");
+        
+        $this->ratings_requests['selectall'] = $this->database->prepare("SELECT * FROM `ratings` WHERE `rating_id`=:rating_id");
+        $this->ratings_requests['select'] = $this->database->prepare("SELECT `title_en`, `title_ru`, `title_ch`, `descr_en`, `descr_ru`, `descr_ch` FROM `ratings` WHERE `rating_id`=:rating_id");
+        $this->ratings_requests['update'] = $this->database->prepare("INSERT INTO `ratings`(`title_en`, `title_ru`, `title_ch`, `descr_en`, `descr_ru`, `descr_ch`) VALUES (:title_en,:title_ru,:title_ch,:descr_en,:descr_ru,:descr_ch)");
+        $this->ratings_requests['insert'] = $this->database->prepare("UPDATE `ratings` SET `title_en`=:title_en,`title_ru`=:title_ru,`title_ch`=:title_ch,`descr_en`=:descr_en,`descr_ru`=:descr_ru,`descr_ch`=:descr_ch WHERE `rating_id`=:rating_id");
+        $this->ratings_requests['remove'] = $this->database->prepare("DELETE FROM `ratings` WHERE `rating_id`=:rating_id");
 
+        $this->characters_requests['selectall'] = $this->database->prepare("SELECT * FROM `characters`");
+        $this->characters_requests['select'] = $this->database->prepare("SELECT , `name_en`, `name_ru`, `name_ch`, `fandom_id`, `is_original`, `is_canonical` FROM `characters` WHERE `character_id`=:character_id");
+        $this->characters_requests['update'] = $this->database->prepare("UPDATE `characters` SET `name_en`=:name_en,`name_ru`=:name_ru,`name_ch`=:name_ch,`fandom_id`=:fandom_id,`is_original`=:is_original,`is_canonical`=:is_canonical WHERE `character_id`=:character_id");
+        $this->characters_requests['insert'] = $this->database->prepare("INSERT INTO `characters`(`name_en`, `name_ru`, `name_ch`, `fandom_id`, `is_original`, `is_canonical`) VALUES (:name_en,:name_ru,:name_ch,:fandom_id,:is_original,:is_canonical)");
+        $this->characters_requests['remove'] = $this->database->prepare("DELETE FROM `characters` WHERE `character_id`=:character_id");
         }
 
     /**
@@ -124,33 +138,33 @@ class Database
      * @param array  $params Массив параметров для запроса
      * @return void
      */
-    public function execute_statement(string $type, string $table, array $params)
+    public function execute_statement($type, $table, $params)
     {
         if (($type != null || $type != "") || ($table != null || $table != "")) {
             switch ($table) {
                 case 'users':
-                    $this->users_requests[$type] = $this->database->execute($params);
+                    $this->users_requests[$type] = $this->users_requests[$type]->execute($params);
                     break;
                 case 'usergroups':
-                    $this->usergorups_requests[$type] = $this->database->execute($params);
+                    $this->usergorups_requests[$type] = $this->usergorups_requests[$type]->execute($params);
                     break;
                 case 'bans':
-                    $this->bans_requests[$type] = $this->database->execute($params);
+                    $this->bans_requests[$type] = $this->bans_requests[$type]->execute($params);
                     break;
                 case 'fanfics':
-                    $this->fanfics_requests[$type] = $this->database->execute($params);
+                    $this->fanfics_requests[$type] = $this->fanfics_requests[$type]->execute($params);
                     break;
                 case 'replies':
-                    $this->replies_requests[$type] = $this->database->execute($params);
+                    $this->replies_requests[$type] = $this->replies_requests[$type]->execute($params);
                     break;
                 case 'fandoms':
-                    $this->fandoms_requests[$type] = $this->database->execute($params);
+                    $this->fandoms_requests[$type] = $this->fandoms_requests[$type]->execute($params);
                     break;
                 case 'genres':
-                    $this->genres_requests[$type] = $this->database->execute($params);
+                    $this->genres_requests[$type] = $this->genres_requests[$type]->execute($params);
                     break;
                 case 'orders':
-                    $this->orders_requests[$type] = $this->database->execute($params);
+                    $this->orders_requests[$type] = $this->orders_requests[$type]->execute($params);
                     break;
                 default:
                     print("Ошибка - для исполнения запросов udef используйте execute_udef()");
