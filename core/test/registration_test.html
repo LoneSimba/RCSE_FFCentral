@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Registration test</title>
+        <meta charset='utf-8'>
+    </head>
+    <body>
+        <form method="POST" action="registration_test.php" autocomplete>
+            <label for="login">Ваш логин: </label><input name="login" placeholder="ThaN0s"><br>
+            <label for="password1">Ваш пароль: </label><input type="password" name="password1"><br>
+            <label for="password2">Пароль еще раз: </label><input type="password" name="password2"><br>
+            <label for="email">Ваш email: </label><input type="email" name="email"><br>
+            <label for="firstname">Ваше имя: </label><input name="firstname" placeholder="Вася"><br>
+            <label for="lastname">Ваша фамилия: </label><input name="lastname" placeholder="Пупкин"><br>
+            <label for="brithdate">Дата рождения: </label><input type="date" name="brithdate"><br>
+            <label for="sex">Ваш пол: </label><select name="sex">
+                <option value="male">Мужской</option>
+                <option value="female">Женский</option>
+            </select><br>
+            <label for="origin">Откуда Вы: </label><input name="origin" placeholder="Город, Страна"><br>
+            <input type="submit">
+        </form>
+    </body>
+</html>

@@ -5,9 +5,11 @@
  * 
  * В этом файле размещены основные функции взаимодействия с БД, работает через СУБД PDO
  * @author LoneSimba <siluet-stalker99@yandex.ru>
- * @version 0.1b
+ * @version 0.1c
  * @package RCSE_FFCentral
  */
+
+ require_once("other.php");
 
 
 /**
@@ -22,16 +24,16 @@ class Database
     /*
      * Запросы
      */
-    public $users_requests = ['select' => null, 'selectall' => null, 'login' => null, 'update' => null, 'insert' => null, 'remove' => null];
-    public $usergorups_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null];
-    public $bans_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
-    public $fanfics_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
-    public $relationhips_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
-    public $fandoms_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null];
-    public $genres_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
-    public $orders_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
-    public $ratings_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
-    public $characters_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
+    public $users_requests = ['select' => null, 'selectall' => null, 'login' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
+    public $usergorups_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null, 'result' => null];
+    public $bans_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
+    public $fanfics_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
+    public $relationhips_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
+    public $fandoms_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null, 'result' => null];
+    public $genres_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
+    public $orders_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
+    public $ratings_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
+    public $characters_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
 
     public $udef_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
 
@@ -39,6 +41,8 @@ class Database
      * Экземпляры класса 
      */
     private $database;
+    private $other;
+    private $config;
 
     /**
      * Конструктор Database
@@ -47,10 +51,17 @@ class Database
      */
     public function __construct()
     {
+        $this->other = new Other();
+
+        /*
+        $this->config = $this->other->read_config();
+
+        $dbinfo = 'mysql:dbname='.$config['db_name'].';host='.$config['db_host'];
+        $dbuser = $config['db_user'];
+        $dbpass = $config['db_pass'];
+        */
 
         $dbinfo = 'mysql:dbname=RCSE_FFCentral;host=127.0.0.1';
-        $dbuser;
-        $dbpass;
 
         try {
             $this->database = new PDO($dbinfo, 'root', '', array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING));
@@ -143,28 +154,28 @@ class Database
         if (($type != null || $type != "") || ($table != null || $table != "")) {
             switch ($table) {
                 case 'users':
-                    $this->users_requests[$type] = $this->users_requests[$type]->execute($params);
+                    $this->users_requests['result'] = $this->users_requests[$type]->execute($params);
                     break;
                 case 'usergroups':
-                    $this->usergorups_requests[$type] = $this->usergorups_requests[$type]->execute($params);
+                    $this->usergorups_requests['result'] = $this->usergorups_requests[$type]->execute($params);
                     break;
                 case 'bans':
-                    $this->bans_requests[$type] = $this->bans_requests[$type]->execute($params);
+                    $this->bans_requests['result'] = $this->bans_requests[$type]->execute($params);
                     break;
                 case 'fanfics':
-                    $this->fanfics_requests[$type] = $this->fanfics_requests[$type]->execute($params);
+                    $this->fanfics_requests['result'] = $this->fanfics_requests[$type]->execute($params);
                     break;
                 case 'replies':
-                    $this->replies_requests[$type] = $this->replies_requests[$type]->execute($params);
+                    $this->replies_requests['result'] = $this->replies_requests[$type]->execute($params);
                     break;
                 case 'fandoms':
-                    $this->fandoms_requests[$type] = $this->fandoms_requests[$type]->execute($params);
+                    $this->fandoms_requests['result'] = $this->fandoms_requests[$type]->execute($params);
                     break;
                 case 'genres':
-                    $this->genres_requests[$type] = $this->genres_requests[$type]->execute($params);
+                    $this->genres_requests['result'] = $this->genres_requests[$type]->execute($params);
                     break;
                 case 'orders':
-                    $this->orders_requests[$type] = $this->orders_requests[$type]->execute($params);
+                    $this->orders_requests['result'] = $this->orders_requests[$type]->execute($params);
                     break;
                 default:
                     print("Ошибка - для исполнения запросов udef используйте execute_udef()");
@@ -184,7 +195,7 @@ class Database
      * @return void
      * @todo Вывод сообщения об ошибке в браузер через модальное окно
      */
-    private function prepare_statement_wtable(string $table, string $type, array $params, string $statement)
+    private function prepare_nondefault_statement($table, $type, $params, $statement)
     {
         if ($table != null || $table != "") {
             switch ($type) {

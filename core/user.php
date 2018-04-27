@@ -6,12 +6,13 @@
  * @author LoneSimba <silet-stalker99@yandex.ru>
  * @version 0.1
  * @package RCSE_FFCentral
+ * @todo Составить список настроек аккаунта, добавить в таблицу пользователей звания и биографию, подключить чтение конфига
  */
 
  /**
   * Подключение database.php
   */
-  require_once("./database.php");
+  require_once("database.php");
 
  /**
   * Обеспечивает работу системы пользователей
@@ -22,7 +23,9 @@
 class User 
 {
   
-  public $database;
+  private $database;
+  private $other;
+  private $config;
 
   /**
    * Конструктор класса User
@@ -30,6 +33,9 @@ class User
   public function __construct() 
   {
     $this->database = new Database();
+    $this->other = new Other();
+
+    //$this->config = $this->other->read_config();
 
     if(!isset($_SESSION)) session_start();
   }
@@ -42,7 +48,7 @@ class User
    * @param string $password  пароль
    * @return void
    */
-  public function auth(string $login, string $password) 
+  public function auth($login, $password) 
   {
       $params = array($login);
       $query = $this->database->execute_statement('select','users',$params);
@@ -60,9 +66,30 @@ class User
       }
   }
 
-  public function register() 
+  public function register($login, $password, $email, $firstname, $lastname, $brithdate, $sex, $origin) 
   {
-    
+    $regdate = date('Y-m-d H:i');
+    $settings = "theme:default;brithdate:shown;email:shown;feed:true;";
+    $titles = "Newbie;Tester";
+    $usergroup = "User";
+
+    /*
+    $options = array('cost'=>$this->config[encr_cost]);
+    $encrypted_password = password_hash($password, PASSWORD_DEFAULT, $options);
+    */
+
+    $user_params = array($login, $firstname, $lastname, password_hash($password, PASSWORD_DEFAULT), $email, $usergroup, $brithdate, $regdate, $sex, $origin, $settings);
+
+    $register_exec_result = $this->database->execute_statement('insert','users',$user_params);
+
+    if(!$this->database->users_requests['result']) {
+      $error = $this->database->users_requests['insert']->errorInfo();
+      print 'Ошибка: '.$error[2];
+    } else {
+      $error = '';
+      echo "Все ОК.";
+    }
+
   }
 
 }
