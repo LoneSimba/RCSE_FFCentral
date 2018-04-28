@@ -9,7 +9,7 @@
  * @package RCSE_FFCentral
  */
 
- require_once("other.php");
+require_once("other.php");
 
 
 /**
@@ -24,16 +24,16 @@ class Database
     /*
      * Запросы
      */
-    public $users_requests = ['select' => null, 'selectall' => null, 'login' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
-    public $usergorups_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null, 'result' => null];
-    public $bans_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
-    public $fanfics_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
-    public $relationhips_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
-    public $fandoms_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null, 'result' => null];
-    public $genres_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
-    public $orders_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
-    public $ratings_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
-    public $characters_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null];
+    public $users_requests = ['select' => null, 'selectall' => null, 'login' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null, 'bool' => null];
+    public $usergorups_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null, 'result' => null, 'bool' => null];
+    public $bans_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null, 'bool' => null];
+    public $fanfics_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null, 'bool' => null];
+    public $relationhips_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null, 'bool' => null];
+    public $fandoms_requests = ['select' => null, 'selectall' => null, 'update' => null, 'instert' => null, 'remove' => null, 'result' => null, 'bool' => null];
+    public $genres_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null, 'bool' => null];
+    public $orders_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null, 'bool' => null];
+    public $ratings_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null, 'bool' => null];
+    public $characters_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null, 'result' => null, 'bool' => null];
 
     public $udef_requests = ['select' => null, 'selectall' => null, 'update' => null, 'insert' => null, 'remove' => null];
 
@@ -59,7 +59,7 @@ class Database
         $dbinfo = 'mysql:dbname='.$config['db_name'].';host='.$config['db_host'];
         $dbuser = $config['db_user'];
         $dbpass = $config['db_pass'];
-        */
+         */
 
         $dbinfo = 'mysql:dbname=RCSE_FFCentral;host=127.0.0.1';
 
@@ -127,7 +127,7 @@ class Database
         $this->orders_requests['update'] = $this->database->prepare("UPDATE `orders` SET `title`=:title,`description`=:description,`language`=:language,`type`=:type,`fandoms_id`=:fandoms_id,`author`=:author WHERE `order_id`=:order_id");
         $this->orders_requests['insert'] = $this->database->prepare("INSERT INTO `orders`(`title`, `description`, `language`, `type`, `fandoms_id`, `author`) VALUES (:title,:description,:language,:type,:fandoms_id,:author)");
         $this->orders_requests['remove'] = $this->database->prepare("DELETE FROM `orders` WHERE `order_id`=:order_id");
-        
+
         $this->ratings_requests['selectall'] = $this->database->prepare("SELECT * FROM `ratings` WHERE `rating_id`=:rating_id");
         $this->ratings_requests['select'] = $this->database->prepare("SELECT `title_en`, `title_ru`, `title_ch`, `descr_en`, `descr_ru`, `descr_ch` FROM `ratings` WHERE `rating_id`=:rating_id");
         $this->ratings_requests['update'] = $this->database->prepare("INSERT INTO `ratings`(`title_en`, `title_ru`, `title_ch`, `descr_en`, `descr_ru`, `descr_ch`) VALUES (:title_en,:title_ru,:title_ch,:descr_en,:descr_ru,:descr_ch)");
@@ -139,7 +139,7 @@ class Database
         $this->characters_requests['update'] = $this->database->prepare("UPDATE `characters` SET `name_en`=:name_en,`name_ru`=:name_ru,`name_ch`=:name_ch,`fandom_id`=:fandom_id,`is_original`=:is_original,`is_canonical`=:is_canonical WHERE `character_id`=:character_id");
         $this->characters_requests['insert'] = $this->database->prepare("INSERT INTO `characters`(`name_en`, `name_ru`, `name_ch`, `fandom_id`, `is_original`, `is_canonical`) VALUES (:name_en,:name_ru,:name_ch,:fandom_id,:is_original,:is_canonical)");
         $this->characters_requests['remove'] = $this->database->prepare("DELETE FROM `characters` WHERE `character_id`=:character_id");
-        }
+    }
 
     /**
      * Выполняет запрос, указанный в $type
@@ -154,28 +154,36 @@ class Database
         if (($type != null || $type != "") || ($table != null || $table != "")) {
             switch ($table) {
                 case 'users':
-                    $this->users_requests['result'] = $this->users_requests[$type]->execute($params);
+                    $bool = $this->users_requests[$type]->execute($params);
+                    return array('bool' => $bool, 'result' => $this->users_requests[$type]);
                     break;
                 case 'usergroups':
-                    $this->usergorups_requests['result'] = $this->usergorups_requests[$type]->execute($params);
+                    $bool = $this->usergorups_requests[$type]->execute($params);
+                    return array('bool' => $bool, 'result' => $this->usergorups_requests[$type]);
                     break;
                 case 'bans':
-                    $this->bans_requests['result'] = $this->bans_requests[$type]->execute($params);
+                    $bool = $this->bans_requests[$type]->execute($params);
+                    return array('bool' => $bool, 'result' => $this->bans_requests[$type]);
                     break;
                 case 'fanfics':
-                    $this->fanfics_requests['result'] = $this->fanfics_requests[$type]->execute($params);
+                    $bool = $this->fanfics_requests[$type]->execute($params);
+                    return array('bool' => $bool, 'result' => $this->fanfics_requests[$type]);
                     break;
                 case 'replies':
-                    $this->replies_requests['result'] = $this->replies_requests[$type]->execute($params);
+                    $bool = $this->replies_requests[$type]->execute($params);
+                    return array('bool' => $bool, 'result' => $this->replies_requests[$type]);
                     break;
                 case 'fandoms':
-                    $this->fandoms_requests['result'] = $this->fandoms_requests[$type]->execute($params);
+                    $bool = $this->fandoms_requests[$type]->execute($params);
+                    return array('bool' => $bool, 'result' => $this->fandoms_requests[$type]);
                     break;
                 case 'genres':
-                    $this->genres_requests['result'] = $this->genres_requests[$type]->execute($params);
+                    $bool = $this->genres_requests[$type]->execute($params);
+                    return array('bool' => $bool, 'result' => $this->genres_requests[$type]);
                     break;
                 case 'orders':
-                    $this->orders_requests['result'] = $this->orders_requests[$type]->execute($params);
+                    $bool = $this->orders_requests[$type]->execute($params);
+                    return array('bool' => $bool, 'result' => $this->orders_requests[$type]);
                     break;
                 default:
                     print("Ошибка - для исполнения запросов udef используйте execute_udef()");
